@@ -19,8 +19,33 @@ namespace CabInvoiceGenerator
         /// <summary>
         /// Constructor to Create RideRepository instance
         /// </summary>
+        public InvoiceGenerator(Ridetype rideType)
+        {
+            this.rideType = rideType;
+            this.rideRepository = new RideRepository();
+            try
+            {
+                //If the Ride Type is Premium then Rates for Premium else for Normal  
+                if (rideType.Equals(Ridetype.Premium))
+                {
+                    this.MINIMUM_COST_PER_KM = 15;
+                    this.COST_PER_TIME = 2;
+                    this.MINIMUM_FARE = 20;
+                }
+                else if (rideType.Equals(Ridetype.Normal))
+                {
+                    this.MINIMUM_COST_PER_KM = 10;
+                    this.COST_PER_TIME = 1;
+                    this.MINIMUM_FARE = 5;
+                }
 
-        
+            }
+            catch (CabInvoiceException)
+            {
+                throw new CabInvoiceException(CabInvoiceException.ExceptionType.Invalid_Ride_Type, "Invalid ride type");
+            }
+        }
+
 
         //Function to Calculate Fare
         public double calculateFare(double distance, int time)
